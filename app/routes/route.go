@@ -32,7 +32,7 @@ func NewEngine() *echo.Echo {
 		return c.String(200, "pong")
 	})
 
-	clientRoutesRegister(router)
+	wsRoutesRegister(router)
 	chatGrouopRoutesRegister(router)
 	//---------------------------------------------------------------------------------------------------------------------
 

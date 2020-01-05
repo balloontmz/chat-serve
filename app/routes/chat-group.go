@@ -1,7 +1,7 @@
 package routes
 
 import (
-	"github.com/balloontmz/chat-serve/app/controllers"
+	"github.com/balloontmz/chat-serve/app/controllers/chatgroup"
 	"github.com/labstack/echo"
 )
 
@@ -9,10 +9,10 @@ import (
 func chatGrouopRoutesRegister(router *echo.Echo) *echo.Echo {
 
 	var group = router.Group("group")
-	group.GET("", controllers.Index)
-	group.POST("", controllers.Store)
-	group.GET(":id", controllers.Show)
-	// group.PUT("/:id", controllers.Update)
-	// group.DELETE("/:id", controllers.Destroy)
+	group.GET("", chatgroup.Index)
+	group.POST("", chatgroup.Store)
+	group.GET(":id", chatgroup.Show)
+	// group.PUT("/:id", chatgroup.Update)
+	// group.DELETE("/:id", chatgroup.Destroy)
 	return router
 }
