@@ -1,14 +1,9 @@
 package cmd
 
 import (
-	"fmt"
-	"net/http"
-	"strconv"
-
-	"github.com/balloontmz/chat-serve/app/model"
+	"github.com/balloontmz/chat-serve/app/models"
 
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
 )
 
 func init() {
@@ -29,7 +24,7 @@ func init() {
 
 //runServe 启动网络服务
 func runTest(cmd *cobra.Command, args []string) {	
-	if _, err := model.InitDB(model.Config); err != nil { // 初始化数据库链接
+	if _, err := models.InitDB(models.Config); err != nil { // 初始化数据库链接
 		panic(err)
 	}
 }

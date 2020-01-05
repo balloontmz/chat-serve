@@ -5,9 +5,12 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/balloontmz/chat-serve/app/config"
+	"github.com/balloontmz/chat-serve/app/routes"
+	"github.com/balloontmz/chat-serve/app/models"
+
 	"github.com/gorilla/websocket"
 	"github.com/labstack/echo"
-	"github.com/labstack/echo/middleware"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -40,13 +43,19 @@ func init() {
 //runServe 启动网络服务
 func runServe(cmd *cobra.Command, args []string) {
 	fmt.Println("这里启动了服务器,当前获取的 port 为:", viper.GetString("port"))
-	e := echo.New()
-	e.Use(middleware.Logger())
-	e.Use(middleware.Recover())
-	e.Use(middleware.CORS())
-	e.Static("/", "../public")
-	e.GET("/ws", hello)
-	e.Logger.Fatal(e.Start(":1323"))
+
+	//初始化日志,每天自动创建存储日志
+	config.InitLog() // 此配置初步测试成功，如果新建文件夹需先创建文件夹
+
+	// 初始化数据库连接,可能需要添加连接池
+	if _, err := models.InitDB(models.Config); err != nil { 
+		panic(err)
+	}
+
+	router := routes.NewEngine() // 初始化路由
+	router.GET("/ws", hello)
+	// Listen and serve on 0.0.0.0:8080
+	router.Logger.Fatal(router.Start(":1323"))
 }
 
 func hello(c echo.Context) error {
