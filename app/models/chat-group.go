@@ -25,8 +25,8 @@ func GroupList() []ChatGroup {
 	return groups
 }
 
-//CreateGrouo 创建聊天室
-func CreateGrouo(g ChatGroup) {
+//CreateGroup 创建聊天室
+func CreateGroup(g ChatGroup) {
 	DB.Create(&g)
 	return
 }

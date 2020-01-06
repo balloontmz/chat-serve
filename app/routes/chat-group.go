@@ -5,8 +5,8 @@ import (
 	"github.com/labstack/echo"
 )
 
-//EmailRoutesRegister is a simple
-func chatGrouopRoutesRegister(router *echo.Echo) *echo.Echo {
+//chatGroupRoutesRegister is a simple
+func chatGroupRoutesRegister(router *echo.Echo) *echo.Echo {
 
 	var group = router.Group("group")
 	group.GET("", chatgroup.Index)

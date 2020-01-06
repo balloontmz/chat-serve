@@ -33,7 +33,8 @@ func NewEngine() *echo.Echo {
 	})
 
 	wsRoutesRegister(router)
-	chatGrouopRoutesRegister(router)
+	chatGroupRoutesRegister(router)
+	userRoutesRegister(router)
 	//---------------------------------------------------------------------------------------------------------------------
 
 	// 静态文件路由
