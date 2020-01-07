@@ -2,7 +2,7 @@ package routes
 
 import (
 	"github.com/balloontmz/chat-serve/app/controllers/user"
-	"github.com/balloontmz/chat-serve/app/service/cusjwt"
+	"github.com/balloontmz/chat-serve/app/service/jwtservice"
 
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
@@ -14,11 +14,7 @@ func userRoutesRegister(router *echo.Echo) *echo.Echo {
 	u.POST("/login", user.Login)
 
 	// Configure middleware with the custom claims type
-	var config = middleware.JWTConfig{
-		Claims:     &cusjwt.JwtCustomClaims{},
-		SigningKey: []byte(cusjwt.JWTSecret),
-	}
-	u.Use(middleware.JWTWithConfig(config))
+	u.Use(middleware.JWTWithConfig(jwtservice.CreateJWTConfig())) // 权限中间件
 
 	u.GET("/info", user.Info)
 

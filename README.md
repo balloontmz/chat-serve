@@ -21,3 +21,6 @@
 [初始化问题](https://blog.csdn.net/zhangzeyuaaa/article/details/77941039)
 
 [gorm 模型定义 -- tag](https://juejin.im/post/5ce2a5f3e51d455d86719f77)
+
+## note
+由于 user chan 采用 map 保存,并且键为 user id.所以需要保证每个用户只存在一次登录,此处应该在 jwt 中处理
