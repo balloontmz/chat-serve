@@ -54,7 +54,7 @@ func Entrance(c echo.Context) error {
 		_, msg, err := ws.ReadMessage()
 		if err != nil {
 			log.Info("进入此处代表读取消息失败,ws 连接中断", err)
-			//此处将维护的全局
+			//此处将维护的全局 map 中移除该用户的连接
 			return res.Fmt(c, 0, "ws 连接中断", nil)
 		}
 		//读取到一条消息之后

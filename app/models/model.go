@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/balloontmz/chat-serve/app/config"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres" // 数据库驱动
 	"github.com/labstack/gommon/log"
@@ -46,6 +47,8 @@ func InitDB(conf *DBConfig) (*gorm.DB, error) {
 	if err != nil {
 		return nil, err
 	}
+	db.SetLogger(config.GlobalDBLogger)
+	db.LogMode(true) //TODO: 打印日志,此处应该分环境
 	DB = db
 	Config = conf
 
