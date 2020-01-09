@@ -26,3 +26,14 @@ func MsgList() []ChatMsg {
 	DB.Find(&msgs)
 	return msgs
 }
+
+//CreateMsg 创建消息
+func CreateMsg(userID, groupID int, msg string) ChatMsg {
+	var m = ChatMsg{
+		Msg:     msg,
+		UserID:  uint(userID),
+		GroupID: uint(groupID),
+	}
+	DB.Create(&m)
+	return m
+}

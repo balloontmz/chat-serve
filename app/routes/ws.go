@@ -12,7 +12,7 @@ import (
 func wsRoutesRegister(router *echo.Echo) *echo.Echo {
 
 	var wsRouter = router.Group("ws")
-	wsRouter.Use(middleware.JWTWithConfig(jwtservice.CreateJWTConfigFromQuery())) // 权限中间件
+	wsRouter.Use(middleware.JWTWithConfig(jwtservice.CreateJWTConfig())) // 权限中间件
 	wsRouter.GET("", ws.Entrance)
 	return router
 }

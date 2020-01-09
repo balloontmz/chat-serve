@@ -33,6 +33,9 @@ func Entrance(c echo.Context) error {
 
 	//TODO: group id 应该是需要在发送的消息中携带, websocket 创建应该是进入列表时创建!!!现在的 msg 只是单纯的string,后面应该改造成对象!!!
 	gID, _ := strconv.Atoi(c.QueryParam("g_id"))
+	if gID == 0 {
+		gID = 3
+	}
 	var uID = jwtservice.GetUserIDFromEchoContext(c)
 
 	wsservice.SetConnMap(uID, ws) // 设置全局变量中用户连接的 map,如果需要分布式,需要对某个用户做一个映射
@@ -61,7 +64,7 @@ func Entrance(c echo.Context) error {
 		//目前设想是: 将消息发送给 group 的处理器,保存到数据库并分发给当前活跃的用户 ws,存的应该有消息内容和发送者 id
 		//对于发送者,应该是返回是否发送成功的标识,而不是消息内容.
 		//消息是否应该存在一个唯一标识 -- id?
-		wsservice.DealMsg(uID, gID, string(msg))
+		wsservice.DealMsg(uID, gID, msg)
 
 		fmt.Printf("读取到来自客户端的消息,将其返回给客户端%s\n", msg)
 	}
