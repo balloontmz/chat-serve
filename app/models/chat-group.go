@@ -19,9 +19,11 @@ func (ChatGroup) TableName() string {
 }
 
 //GroupList 聊天室列表
-func GroupList() []ChatGroup {
+func GroupList(uID int) []ChatGroup {
 	var groups []ChatGroup
-	DB.Find(&groups)
+	var groupIDs []int
+	DB.Model(&UserGroup{}).Where("user_id = ?", uID).Pluck("group_id", &groupIDs)
+	DB.Model(&ChatGroup{}).Where("id in (?)", groupIDs).Find(&groups)
 	return groups
 }
 

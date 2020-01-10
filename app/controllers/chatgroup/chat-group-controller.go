@@ -5,12 +5,16 @@ import (
 
 	"github.com/balloontmz/chat-serve/app/models"
 	"github.com/balloontmz/chat-serve/app/res"
+	"github.com/balloontmz/chat-serve/app/service/jwtservice"
+	"github.com/dgrijalva/jwt-go"
 	"github.com/labstack/echo"
 )
 
 //Index 获取聊天室列表
 func Index(c echo.Context) error {
-	return res.Fmt(c, 1, "", models.GroupList())
+	user := c.Get("user").(*jwt.Token)
+	claims := user.Claims.(*jwtservice.JwtCustomClaims)
+	return res.Fmt(c, 1, "", models.GroupList(claims.UID))
 }
 
 //Store 保存聊天室
