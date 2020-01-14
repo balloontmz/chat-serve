@@ -1,6 +1,7 @@
 package models
 
 import (
+	"github.com/balloontmz/chat-serve/app/cusvalidate"
 	"time"
 )
 
@@ -11,6 +12,7 @@ type ChatMsg struct {
 	UpdatedAt time.Time  `json:"updated_at"`
 	DeletedAt *time.Time `gorm:"index" json:"-"`
 	Msg       string     `gorm:"type:text" json:"msg"`
+	Type      uint       `gorm:"type:int;index;default:1" json:"type"`
 	UserID    uint       `gorm:"type:int;index" json:"user_id"`
 	GroupID   uint       `gorm:"type:int;index" json:"group_id"`
 }
@@ -21,7 +23,19 @@ func (ChatMsg) TableName() string {
 }
 
 //MsgList 聊天信息列表
-func MsgList() []ChatMsg {
+func MsgList(query cusvalidate.MsgListQuery) []ChatMsg {
+	var d = DB
+	if query.GroupIDS != nil {
+		d = d.Where("group_id in (?)", query.GroupIDS)
+	}
+
+	var msgs []ChatMsg
+	d.Find(&msgs)
+	return msgs
+}
+
+//MsgListUseGroupIDs 根据传入的聊天室id 数组查找消息
+func MsgListUseGroupIDs(groupIDs []int) []ChatMsg {
 	var msgs []ChatMsg
 	DB.Find(&msgs)
 	return msgs

@@ -49,13 +49,13 @@ func DealMsg(userID, groupID int, msg []byte) error {
 		if err != nil {
 			return err
 		}
-		var uIDs = getUsersUseGroupID(groupID)                        // 获取当前聊天室的所有用户id
-		var msgModel = insertMsg(userID, groupID, msgStruct.Data.Msg) // 将消息加入数据库
-		go sendMsgUseIDs(uIDs, msgModel)                              // 此处放入异步处理 -- 此处应该放入队列,并且有一定的除错机制
+		var uIDs = getUsersUseGroupID(msgStruct.Data.GroupID)                        // 获取当前聊天室的所有用户id
+		var msgModel = insertMsg(userID, msgStruct.Data.GroupID, msgStruct.Data.Msg) // 将消息加入数据库
+		go sendMsgUseIDs(uIDs, msgModel)                                             // 此处放入异步处理 -- 此处应该放入队列,并且有一定的除错机制
 	default:
-		var uIDs = getUsersUseGroupID(groupID)                        // 获取当前聊天室的所有用户id
-		var msgModel = insertMsg(userID, groupID, msgStruct.Data.Msg) // 将消息加入数据库
-		go sendMsgUseIDs(uIDs, msgModel)                              // 此处放入异步处理 -- 此处应该放入队列,并且有一定的除错机制
+		var uIDs = getUsersUseGroupID(msgStruct.Data.GroupID)                        // 获取当前聊天室的所有用户id
+		var msgModel = insertMsg(userID, msgStruct.Data.GroupID, msgStruct.Data.Msg) // 将消息加入数据库
+		go sendMsgUseIDs(uIDs, msgModel)                                             // 此处放入异步处理 -- 此处应该放入队列,并且有一定的除错机制
 	}
 
 	return nil

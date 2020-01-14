@@ -1,10 +1,12 @@
 package routes
 
 import (
+	"github.com/balloontmz/chat-serve/app/cusvalidate"
+
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 	"github.com/labstack/gommon/log"
-	// "gopkg.in/go-playground/validator.v9"
+	"gopkg.in/go-playground/validator.v9"
 )
 
 //NewEngine is a simple
@@ -12,6 +14,7 @@ func NewEngine() *echo.Echo {
 
 	// 创建一个不带任何默认中间件的路由器
 	router := echo.New()
+	router.Validator = &cusvalidate.CustomValidator{Validator: validator.New()}
 
 	// router.Validator = &cusvalidator.CustomValidator{Validator: validator.New()}
 
@@ -34,6 +37,7 @@ func NewEngine() *echo.Echo {
 
 	wsRoutesRegister(router)
 	chatGroupRoutesRegister(router)
+	chatMsgRoutesRegister(router)
 	userRoutesRegister(router)
 	//---------------------------------------------------------------------------------------------------------------------
 
