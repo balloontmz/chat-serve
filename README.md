@@ -27,3 +27,7 @@
 
 ## note
 由于 user chan 采用 map 保存,并且键为 user id.所以需要保证每个用户只存在一次登录,此处应该在 jwt 中处理
+
+## 1579070079
+[比较两个 slice 是否相等 -- 遍历性能优于反射](https://www.jianshu.com/p/80f5f5173fca)
+[比较 slice 前进行边界限制能提升性能](https://go101.org/article/bounds-check-elimination.html)

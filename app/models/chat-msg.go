@@ -42,11 +42,12 @@ func MsgListUseGroupIDs(groupIDs []int) []ChatMsg {
 }
 
 //CreateMsg 创建消息
-func CreateMsg(userID, groupID int, msg string) ChatMsg {
+func CreateMsg(userID, groupID, action int, msg string) ChatMsg {
 	var m = ChatMsg{
 		Msg:     msg,
 		UserID:  uint(userID),
 		GroupID: uint(groupID),
+		Type:    uint(action),
 	}
 	DB.Create(&m)
 	return m

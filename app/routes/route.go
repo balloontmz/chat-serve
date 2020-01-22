@@ -39,6 +39,7 @@ func NewEngine() *echo.Echo {
 	chatGroupRoutesRegister(router)
 	chatMsgRoutesRegister(router)
 	userRoutesRegister(router)
+	qiniuRoutesRegister(router)
 	//---------------------------------------------------------------------------------------------------------------------
 
 	// 静态文件路由

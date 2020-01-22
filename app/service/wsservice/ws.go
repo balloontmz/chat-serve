@@ -44,18 +44,18 @@ func DealMsg(userID, groupID int, msg []byte) error {
 	}
 
 	switch msgStruct.Action {
-	case 1: // 代表是聊天室消息
+	case 1, 2: // 代表是聊天室消息和图片
 
 		if err != nil {
 			return err
 		}
-		var uIDs = getUsersUseGroupID(msgStruct.Data.GroupID)                        // 获取当前聊天室的所有用户id
-		var msgModel = insertMsg(userID, msgStruct.Data.GroupID, msgStruct.Data.Msg) // 将消息加入数据库
-		go sendMsgUseIDs(uIDs, msgModel)                                             // 此处放入异步处理 -- 此处应该放入队列,并且有一定的除错机制
+		var uIDs = getUsersUseGroupID(msgStruct.Data.GroupID)                                          // 获取当前聊天室的所有用户id
+		var msgModel = insertMsg(userID, msgStruct.Data.GroupID, msgStruct.Action, msgStruct.Data.Msg) // 将消息加入数据库
+		go sendMsgUseIDs(uIDs, msgModel)                                                               // 此处放入异步处理 -- 此处应该放入队列,并且有一定的除错机制
 	default:
-		var uIDs = getUsersUseGroupID(msgStruct.Data.GroupID)                        // 获取当前聊天室的所有用户id
-		var msgModel = insertMsg(userID, msgStruct.Data.GroupID, msgStruct.Data.Msg) // 将消息加入数据库
-		go sendMsgUseIDs(uIDs, msgModel)                                             // 此处放入异步处理 -- 此处应该放入队列,并且有一定的除错机制
+		var uIDs = getUsersUseGroupID(msgStruct.Data.GroupID)                                          // 获取当前聊天室的所有用户id
+		var msgModel = insertMsg(userID, msgStruct.Data.GroupID, msgStruct.Action, msgStruct.Data.Msg) // 将消息加入数据库
+		go sendMsgUseIDs(uIDs, msgModel)                                                               // 此处放入异步处理 -- 此处应该放入队列,并且有一定的除错机制
 	}
 
 	return nil
@@ -71,8 +71,8 @@ func getUsersUseGroupID(groupID int) []int {
 	return models.GetUserIDsByGroupID(groupID)
 }
 
-func insertMsg(uID, gID int, msg string) models.ChatMsg {
-	return models.CreateMsg(uID, gID, msg)
+func insertMsg(uID, gID, action int, msg string) models.ChatMsg {
+	return models.CreateMsg(uID, gID, action, msg)
 }
 
 func sendMsgUseIDs(uIDs []int, msgModel models.ChatMsg) {
