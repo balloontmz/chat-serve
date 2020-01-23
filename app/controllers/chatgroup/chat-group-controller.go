@@ -8,6 +8,7 @@ import (
 	"github.com/balloontmz/chat-serve/app/service/jwtservice"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/labstack/echo"
+	"github.com/labstack/gommon/log"
 )
 
 //Index 获取聊天室列表
@@ -19,10 +20,16 @@ func Index(c echo.Context) error {
 
 //Store 保存聊天室
 func Store(c echo.Context) error {
+	log.Info("当前请求的参数为: ", c.Request().Body, "当前请求的类型为:", c.Request().Header)
 	g := models.ChatGroup{
-		Name: c.FormValue("name"),
+		Name:   c.FormValue("name"),
+		Avatar: c.FormValue("avatar"),
 	}
-	models.CreateGroup(g)
+	if e := models.GetGroupByName(g.Name); e.ID != 0 {
+		log.Info("当前获取到的 group 为:", e)
+		return res.Fmt(c, 0, "聊天室已存在", g)
+	}
+	models.CreateGroup(&g)
 	return res.Fmt(c, 1, "", g)
 }
 

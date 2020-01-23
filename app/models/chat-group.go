@@ -10,7 +10,8 @@ type ChatGroup struct {
 	CreatedAt time.Time  `json:"created_at"`
 	UpdatedAt time.Time  `json:"updated_at"`
 	DeletedAt *time.Time `sql:"index" json:"-"`
-	Name      string     `gorm:"size:255" json:"name"` // string默认长度为255, 使用这种tag重设。
+	Name      string     `gorm:"size:255" json:"name"`              // string默认长度为255, 使用这种tag重设。
+	Avatar    string     `gorm:"size:255;default:''" json:"avatar"` // string默认长度为255, 使用这种tag重设。
 }
 
 //TableName 设置 ChatGroup 的表名为`chat_group`
@@ -28,8 +29,8 @@ func GroupList(uID int) []ChatGroup {
 }
 
 //CreateGroup 创建聊天室
-func CreateGroup(g ChatGroup) {
-	DB.Create(&g)
+func CreateGroup(g *ChatGroup) {
+	DB.Create(g)
 	return
 }
 
@@ -37,5 +38,12 @@ func CreateGroup(g ChatGroup) {
 func GetGroupByID(id string) ChatGroup {
 	var g = ChatGroup{}
 	DB.Where("id = ?", id).First(&g)
+	return g
+}
+
+//GetGroupByName 根据名字查找聊天室
+func GetGroupByName(name string) ChatGroup {
+	var g = ChatGroup{}
+	DB.Where("name = ?", name).First(&g)
 	return g
 }
