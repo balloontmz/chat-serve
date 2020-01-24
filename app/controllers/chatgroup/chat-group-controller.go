@@ -21,10 +21,13 @@ func Index(c echo.Context) error {
 //Store 保存聊天室
 func Store(c echo.Context) error {
 	log.Info("当前请求的参数为: ", c.Request().Body, "当前请求的类型为:", c.Request().Header)
-	g := models.ChatGroup{
-		Name:   c.FormValue("name"),
-		Avatar: c.FormValue("avatar"),
+	g := models.ChatGroup{}
+	if err := c.Bind(&g); err != nil {
+		return res.Fmt(c, 0, "绑定数据失败", err)
 	}
+
+	log.Info("当前绑定完的数据为:", g)
+
 	if e := models.GetGroupByName(g.Name); e.ID != 0 {
 		log.Info("当前获取到的 group 为:", e)
 		return res.Fmt(c, 0, "聊天室已存在", g)

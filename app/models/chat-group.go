@@ -1,6 +1,7 @@
 package models
 
 import (
+	"github.com/labstack/gommon/log"
 	"time"
 )
 
@@ -30,7 +31,9 @@ func GroupList(uID int) []ChatGroup {
 
 //CreateGroup 创建聊天室
 func CreateGroup(g *ChatGroup) {
+	log.Info("当前需要创建的群组值为:", *g, "当点 newrecord 为:", DB.NewRecord(*g))
 	DB.Create(g)
+	log.Info("当点 newrecord 为:", DB.NewRecord(*g))
 	return
 }
 
