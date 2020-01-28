@@ -65,6 +65,7 @@ func Login(c echo.Context) error {
 		"token_type":   "Bearer",
 		"username":     u.Name,
 		"userid":       u.ID,
+		"avatar":       u.Avatar,
 	})
 }
 

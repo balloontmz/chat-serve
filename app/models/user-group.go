@@ -11,8 +11,8 @@ type UserGroup struct {
 	CreatedAt time.Time  `json:"created_at"`
 	UpdatedAt time.Time  `json:"updated_at"`
 	DeletedAt *time.Time `gorm:"index" json:"-"`
-	UserID    string     `gorm:"type:int;index" json:"user_id"`
-	GroupID   string     `gorm:"type:int;index" json:"group_id"`
+	UserID    uint       `gorm:"type:int;index" json:"user_id"`
+	GroupID   uint       `gorm:"type:int;index" json:"group_id"`
 }
 
 //TableName 设置 UserGroup 的表名为`user_group`
@@ -23,6 +23,14 @@ func (UserGroup) TableName() string {
 //GetUsersUseGroupID 根据 group id 拉取用户
 func GetUsersUseGroupID(groupID int) []User {
 	return nil
+}
+
+//CreateUserGroup 创建用户聊天关联
+func CreateUserGroup(uG *UserGroup) {
+	log.Info("当前需要创建的用户群组关联为:", *uG, "当点 newrecord 为:", DB.NewRecord(*uG))
+	DB.Create(uG)
+	log.Info("当点 newrecord 为:", DB.NewRecord(*uG))
+	return
 }
 
 //GetUserIDsByGroupID 根据聊天室 id 获取用户的 id

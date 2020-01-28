@@ -11,6 +11,7 @@ type User struct {
 	UpdatedAt time.Time  `json:"updated_at"`
 	DeletedAt *time.Time `gorm:"index" json:"-"`
 	Name      string     `gorm:"type:varchar(255);unique_index" json:"name"` // 唯一索引
+	Avatar    string     `gorm:"type:varchar(255);default:''" json:"avatar"` // 默认为空的用户头像
 	Password  string     `gorm:"type:varchar(255)" json:"-"`
 }
 

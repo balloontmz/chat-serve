@@ -2,6 +2,7 @@ package chatgroup
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/balloontmz/chat-serve/app/models"
 	"github.com/balloontmz/chat-serve/app/res"
@@ -16,6 +17,27 @@ func Index(c echo.Context) error {
 	user := c.Get("user").(*jwt.Token)
 	claims := user.Claims.(*jwtservice.JwtCustomClaims)
 	return res.Fmt(c, 1, "", models.GroupList(claims.UID))
+}
+
+//NotJoinGroup 获取用户未加入的聊天室列表
+func NotJoinGroup(c echo.Context) error {
+	user := c.Get("user").(*jwt.Token)
+	claims := user.Claims.(*jwtservice.JwtCustomClaims)
+	return res.Fmt(c, 1, "", models.NotJoinGroupList(claims.UID))
+}
+
+//AddUser2Group 用户加入聊天组
+func AddUser2Group(c echo.Context) error {
+	user := c.Get("user").(*jwt.Token)
+	claims := user.Claims.(*jwtservice.JwtCustomClaims)
+	gID, _ := strconv.Atoi(c.QueryParam("group_id"))
+	uG := models.UserGroup{
+		UserID:  uint(claims.UID),
+		GroupID: uint(gID),
+	}
+	log.Info("将群组加入当前用户,群组 id 为:", gID, "用户 id 为:", claims)
+	models.CreateUserGroup(&uG)
+	return res.Fmt(c, 1, "添加群组成功", nil)
 }
 
 //Store 保存聊天室
@@ -33,7 +55,21 @@ func Store(c echo.Context) error {
 		return res.Fmt(c, 0, "聊天室已存在", g)
 	}
 	models.CreateGroup(&g)
-	return res.Fmt(c, 1, "", g)
+
+	user := c.Get("user").(*jwt.Token)
+	claims := user.Claims.(*jwtservice.JwtCustomClaims)
+
+	log.Debug("当前的用户 payload 为:", claims)
+
+	uG := models.UserGroup{
+		UserID:  uint(claims.UID),
+		GroupID: g.ID,
+	}
+	models.CreateUserGroup(&uG)
+
+	log.Info("当前的用户群聊关联为:", uG)
+
+	return res.Fmt(c, 1, "添加成功", g)
 }
 
 //Show 显示聊天室

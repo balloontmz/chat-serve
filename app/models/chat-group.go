@@ -29,6 +29,15 @@ func GroupList(uID int) []ChatGroup {
 	return groups
 }
 
+//NotJoinGroupList 不属于当前用户的聊天室列表
+func NotJoinGroupList(uID int) []ChatGroup {
+	var groups []ChatGroup
+	var groupIDs []int
+	DB.Model(&UserGroup{}).Where("user_id = ?", uID).Pluck("group_id", &groupIDs)
+	DB.Model(&ChatGroup{}).Where("id not in (?)", groupIDs).Find(&groups)
+	return groups
+}
+
 //CreateGroup 创建聊天室
 func CreateGroup(g *ChatGroup) {
 	log.Info("当前需要创建的群组值为:", *g, "当点 newrecord 为:", DB.NewRecord(*g))
