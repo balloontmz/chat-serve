@@ -1,6 +1,7 @@
 package routes
 
 import (
+	"github.com/balloontmz/chat-serve/app/controllers/chatgroup"
 	"github.com/balloontmz/chat-serve/app/cusvalidate"
 
 	"github.com/labstack/echo"
@@ -34,6 +35,8 @@ func NewEngine() *echo.Echo {
 		log.Info("测试首页用")
 		return c.String(200, "pong")
 	})
+
+	router.POST("test-img", chatgroup.TestImage)
 
 	wsRoutesRegister(router)
 	chatGroupRoutesRegister(router)

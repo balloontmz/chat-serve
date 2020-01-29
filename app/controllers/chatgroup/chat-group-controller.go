@@ -7,6 +7,7 @@ import (
 	"github.com/balloontmz/chat-serve/app/models"
 	"github.com/balloontmz/chat-serve/app/res"
 	"github.com/balloontmz/chat-serve/app/service/jwtservice"
+	"github.com/balloontmz/chat-serve/app/service/wcservice"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/labstack/echo"
 	"github.com/labstack/gommon/log"
@@ -86,4 +87,11 @@ func Update(c echo.Context) error {
 //Destroy 删除聊天室
 func Destroy(c echo.Context) error {
 	return c.JSON(http.StatusOK, nil)
+}
+
+//TestImage 测试图片解码
+func TestImage(c echo.Context) error {
+	str := c.FormValue("content")
+	wcservice.Base64toBinary(str)
+	return c.String(200, "test")
 }
