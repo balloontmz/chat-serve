@@ -2,7 +2,7 @@ version: '3'
 
 services:
 ### Go Container #########################################
-  google-serve:
+  chat-serve:
     build:
       context: ./project
     restart: on-failure
