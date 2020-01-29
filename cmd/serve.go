@@ -44,5 +44,5 @@ func runServe(cmd *cobra.Command, args []string) {
 	router := routes.NewEngine() // 初始化路由
 	// router.GET("/ws", hello)
 	// Listen and serve on 0.0.0.0:8080
-	router.Logger.Fatal(router.Start(":1323"))
+	router.Logger.Fatal(router.Start(":8080"))
 }

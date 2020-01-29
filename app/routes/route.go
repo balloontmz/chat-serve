@@ -37,6 +37,7 @@ func NewEngine() *echo.Echo {
 	})
 
 	router.POST("test-img", chatgroup.TestImage)
+	router.POST("test-word", chatgroup.TestWordCloud)
 
 	wsRoutesRegister(router)
 	chatGroupRoutesRegister(router)

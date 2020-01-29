@@ -1,9 +1,12 @@
 package jwtservice
 
 import (
+	"net/http"
+
 	"github.com/dgrijalva/jwt-go"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
+	"github.com/labstack/gommon/log"
 )
 
 type (
@@ -47,7 +50,10 @@ func CreateJWTConfig() middleware.JWTConfig {
 		AuthScheme:    "Bearer",
 		Claims:        &JwtCustomClaims{},
 		SigningKey:    []byte(JWTSecret),
-		// ErrorHandler: ErrorHandler,     // 定义验证失败的返回
+		ErrorHandler: func(err error) error {
+			log.Info("验证失败,错误信息为:", err)
+			return echo.NewHTTPError(http.StatusUnauthorized, "验证失败")
+		}, // 定义验证失败的返回
 		// SuccessHandler: SuccessHandler,
 	}
 	return c

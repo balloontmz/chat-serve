@@ -31,3 +31,16 @@
 ## 1579070079
 [比较两个 slice 是否相等 -- 遍历性能优于反射](https://www.jianshu.com/p/80f5f5173fca)
 [比较 slice 前进行边界限制能提升性能](https://go101.org/article/bounds-check-elimination.html)
+
+## 1580274197
+需要开始接触单元测试了,不能一直采用 http 测试的方法!!!
+
+## deploy
+### 交叉编译
+`GOOS=linux GOARCH=amd64 go build hello.go`
+
+`https://www.jianshu.com/p/4b345a9e768e`
+
+`$ docker logs -f -t CONTAINER_ID`
+
+`https://www.jianshu.com/p/1eb1d1d3f25e`

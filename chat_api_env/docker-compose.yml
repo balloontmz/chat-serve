@@ -10,43 +10,8 @@ services:
       - "${GO_PORT}:8080"
     volumes:
       - "./project/log:/log"
-    depends_on:
-      - redis
-      - mysql
     tty: true
 
-### MySQL Container #########################################
-
-  mysql:
-    image: mysql:5.7
-    volumes:
-        #- ../data/mysql:/var/lib/mysql
-      - mysql_data:/var/lib/mysql
-    expose:
-      - 3306
-    ports:
-      - "${MYSQL_PORT}:3306"
-    environment:
-      - MYSQL_ROOT_PASSWORD=123456
-      - MYSQL_DATABASE=chat
-    restart: always
-    command: ['--sql-mode=STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION', ]
-
-### Redis Container #########################################
-  redis:
-      image: redis
-      expose:
-        - "6379"
-      ports:
-        - "${REDIS_PORT}:6379"
-      volumes:
-        - ./data/redis:/data
-      restart: always
-
-### Volumes Setup ###########################################
-
-volumes:
-  mysql_data:
 networks:
   default:
     external:

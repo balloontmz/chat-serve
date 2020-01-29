@@ -13,6 +13,7 @@ func chatGroupRoutesRegister(router *echo.Echo) *echo.Echo {
 
 	group.Use(middleware.JWTWithConfig(jwtservice.CreateJWTConfig())) // 权限中间件
 	group.GET("/not-join", chatgroup.NotJoinGroup)
+	group.GET("/find-list", chatgroup.FindList)
 	group.GET("", chatgroup.Index)
 	group.POST("", chatgroup.Store)
 	group.POST("/add-user", chatgroup.AddUser2Group)

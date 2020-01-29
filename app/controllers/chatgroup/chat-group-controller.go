@@ -7,6 +7,7 @@ import (
 	"github.com/balloontmz/chat-serve/app/models"
 	"github.com/balloontmz/chat-serve/app/res"
 	"github.com/balloontmz/chat-serve/app/service/jwtservice"
+	"github.com/balloontmz/chat-serve/app/service/qnservice"
 	"github.com/balloontmz/chat-serve/app/service/wcservice"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/labstack/echo"
@@ -18,6 +19,20 @@ func Index(c echo.Context) error {
 	user := c.Get("user").(*jwt.Token)
 	claims := user.Claims.(*jwtservice.JwtCustomClaims)
 	return res.Fmt(c, 1, "", models.GroupList(claims.UID))
+}
+
+//FindList 发现页聊天室列表
+func FindList(c echo.Context) error {
+	page := c.QueryParam("page")
+	size := c.QueryParam("size")
+	pageInt, _ := strconv.Atoi(page)
+	sizeInt, _ := strconv.Atoi(size)
+
+	p := models.Params{Page: pageInt, Size: sizeInt}
+
+	groups := models.GetGroups(p)
+
+	return res.Fmt(c, 1, "", groups)
 }
 
 //NotJoinGroup 获取用户未加入的聊天室列表
@@ -89,9 +104,17 @@ func Destroy(c echo.Context) error {
 	return c.JSON(http.StatusOK, nil)
 }
 
-//TestImage 测试图片解码
+//TestImage 测试图片解码并上传
 func TestImage(c echo.Context) error {
 	str := c.FormValue("content")
-	wcservice.Base64toBinary(str)
+	b := wcservice.Base64toBinary(str)
+	qnservice.UploadByBytes(b)
 	return c.String(200, "test")
+}
+
+//TestWordCloud 测试云图
+func TestWordCloud(c echo.Context) error {
+	// str := wcservice.GetWordCloud("")
+	wcservice.UpdateGroupsWordCloud()
+	return c.String(200, "")
 }
