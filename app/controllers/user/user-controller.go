@@ -1,7 +1,6 @@
 package user
 
 import (
-	"net/http"
 	"time"
 
 	"github.com/balloontmz/chat-serve/app/models"
@@ -20,7 +19,36 @@ type User struct {
 
 //Register 用户注册
 func Register(c echo.Context) error {
-	return nil
+	//TODO: 注册用户首先需要判断是否已存在用户名!!!
+	var uData = &User{}
+
+	if err := c.Bind(uData); err != nil {
+		return res.ErrFmt(c, 0, "未找到用户", nil)
+	}
+
+	var u = models.GetUserByUserName(uData.UserName)
+
+	if u.Name != "" {
+		return res.ErrFmt(c, 0, "已存在的用户", nil)
+	}
+	models.CreateUser(models.User{
+		Name:     uData.UserName,
+		Password: uData.Password,
+	})
+	return res.Fmt(c, 1, "注册成功", nil)
+}
+
+//UpdateAvatar 用户更新头像
+func UpdateAvatar(c echo.Context) error {
+	avatar := c.QueryParam("avatar")
+	user := c.Get("user").(*jwt.Token)
+	claims := user.Claims.(*jwtservice.JwtCustomClaims)
+	var u = models.GetUserByUserName(claims.Name)
+	if u.Name == "" {
+		return res.ErrFmt(c, 0, "未找到用户", nil)
+	}
+	u.UpdateAvatar(avatar)
+	return res.ErrFmt(c, 1, "更新用户头像成功", nil)
 }
 
 //Login 用户登录
@@ -73,6 +101,10 @@ func Login(c echo.Context) error {
 func Info(c echo.Context) error {
 	user := c.Get("user").(*jwt.Token)
 	claims := user.Claims.(*jwtservice.JwtCustomClaims)
-	name := claims.Name
-	return c.String(http.StatusOK, "Welcome "+name+"!")
+	var u = models.GetUserByUserName(claims.Name)
+	return res.Fmt(c, 1, "", echo.Map{
+		"username": u.Name,
+		"userid":   u.ID,
+		"avatar":   u.Avatar,
+	})
 }

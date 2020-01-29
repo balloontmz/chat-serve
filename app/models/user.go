@@ -26,3 +26,15 @@ func GetUserByUserName(name string) User {
 	DB.Where("name = ?", name).First(&u)
 	return u
 }
+
+//CreateUser 创建用户
+func CreateUser(u User) {
+	DB.Create(&u)
+	return
+}
+
+//UpdateAvatar 更新用户头像
+func (u User) UpdateAvatar(avatar string) {
+	u.Avatar = avatar
+	DB.Save(&u)
+}

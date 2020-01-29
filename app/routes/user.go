@@ -12,10 +12,11 @@ import (
 func userRoutesRegister(router *echo.Echo) *echo.Echo {
 	var u = router.Group("user")
 	u.POST("/login", user.Login)
+	u.POST("/register", user.Register)
 
 	// Configure middleware with the custom claims type
 	u.Use(middleware.JWTWithConfig(jwtservice.CreateJWTConfig())) // 权限中间件
-
+	u.POST("/update-avatar", user.UpdateAvatar)
 	u.GET("/info", user.Info)
 
 	return router
