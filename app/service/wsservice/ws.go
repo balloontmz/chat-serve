@@ -79,6 +79,8 @@ func sendMsgUseIDs(uIDs []int, msgModel models.ChatMsg) {
 	if len(uIDs) == 0 {
 		log.Info("尝试返送消息时没有查询到相关用户")
 	}
+	u := models.GetUserByUserID(msgModel.UserID)
+	msgModel.UserName = u.Name
 	msg, err := json.Marshal(msgModel)
 	if err != nil {
 		log.Info("序列化消息失败,原因为:", err)

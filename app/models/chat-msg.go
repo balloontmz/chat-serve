@@ -15,7 +15,7 @@ type ChatMsg struct {
 	Type      uint       `gorm:"type:int;index;default:1" json:"type"`
 	UserID    uint       `gorm:"type:int;index" json:"user_id"`
 	GroupID   uint       `gorm:"type:int;index" json:"group_id"`
-	UserName  uint       `gorm:"-" json:"user_name"`
+	UserName  string     `gorm:"-" json:"user_name"`
 }
 
 //TableName 设置 ChatMsg 的表名为`chat_msg`

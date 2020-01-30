@@ -27,6 +27,13 @@ func GetUserByUserName(name string) User {
 	return u
 }
 
+//GetUserByUserID 根据用户名获取用户
+func GetUserByUserID(id uint) User {
+	var u = User{}
+	DB.Where("id = ?", id).First(&u)
+	return u
+}
+
 //CreateUser 创建用户
 func CreateUser(u User) {
 	DB.Create(&u)
