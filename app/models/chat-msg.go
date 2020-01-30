@@ -15,6 +15,7 @@ type ChatMsg struct {
 	Type      uint       `gorm:"type:int;index;default:1" json:"type"`
 	UserID    uint       `gorm:"type:int;index" json:"user_id"`
 	GroupID   uint       `gorm:"type:int;index" json:"group_id"`
+	UserName  uint       `gorm:"-" json:"user_name"`
 }
 
 //TableName 设置 ChatMsg 的表名为`chat_msg`
@@ -24,13 +25,14 @@ func (ChatMsg) TableName() string {
 
 //MsgList 聊天信息列表
 func MsgList(query cusvalidate.MsgListQuery) []ChatMsg {
-	var d = DB
+	var d = DB.Table("chat_msg")
 	if query.GroupIDS != nil {
 		d = d.Where("group_id in (?)", query.GroupIDS)
 	}
 
 	var msgs []ChatMsg
-	d.Find(&msgs)
+	d.Select("chat_msg.id as id, chat_msg.msg as msg, chat_msg.type as type, chat_msg.user_id as user_id, chat_msg.group_id as group_id, chat_user.name as user_name").Joins("left join chat_user on chat_user.id = chat_msg.user_id").Scan(&msgs)
+	// d.Find(&msgs)
 	return msgs
 }
 
